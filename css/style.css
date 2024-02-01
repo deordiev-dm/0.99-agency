@@ -307,6 +307,7 @@ body {
 
 .header {
   position: fixed;
+  z-index: 100;
   top: 0;
   left: 0;
   width: 100%;
@@ -496,8 +497,10 @@ body {
           animation: star-rotate-opposite 2.5s linear infinite;
 }
 
-.main-intro {
+.main-intro__wrapper {
   position: relative;
+  max-width: 70.625rem;
+  margin: 0 auto;
 }
 
 .main-intro__image {
@@ -510,23 +513,21 @@ body {
 .main-intro__image-top-left {
   top: 0;
   left: 0;
-  -webkit-transform: translate(-50%, -65%);
-      -ms-transform: translate(-50%, -65%);
-          transform: translate(-50%, -65%);
+  -webkit-transform: translate(-70%, -50%);
+      -ms-transform: translate(-70%, -50%);
+          transform: translate(-70%, -50%);
 }
 
 .main-intro__image-rigth-bottom {
   bottom: 0;
   right: 0;
-  -webkit-transform: translate(25%, 30%);
-      -ms-transform: translate(25%, 30%);
-          transform: translate(25%, 30%);
+  -webkit-transform: translate(60%, 30%);
+      -ms-transform: translate(60%, 30%);
+          transform: translate(60%, 30%);
 }
 
 .main-intro__title {
   position: relative;
-  max-width: 70.625rem;
-  margin: 0 auto;
   font-weight: 700;
   line-height: 1;
   text-align: center;
