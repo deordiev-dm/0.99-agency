@@ -133,8 +133,9 @@ h6 {
 
 body {
   opacity: 0;
-  -webkit-transition: opacity 400ms ease;
-  transition: opacity 400ms ease;
+  -webkit-transition: opacity 500ms ease;
+  transition: opacity 500ms ease;
+  scroll-behavior: smooth;
 }
 
 .lock body {
@@ -367,6 +368,24 @@ body {
   transition: width 300ms ease, left 300ms ease;
 }
 
+.intro {
+  opacity: 0;
+  -webkit-transform: translateY(6.25rem);
+      -ms-transform: translateY(6.25rem);
+          transform: translateY(6.25rem);
+  -webkit-transition: opacity 700ms ease, -webkit-transform 700ms ease;
+  transition: opacity 700ms ease, -webkit-transform 700ms ease;
+  transition: opacity 700ms ease, transform 700ms ease;
+  transition: opacity 700ms ease, transform 700ms ease, -webkit-transform 700ms ease;
+}
+
+.loaded .intro {
+  opacity: 1;
+  -webkit-transform: translateY(0rem);
+      -ms-transform: translateY(0rem);
+          transform: translateY(0rem);
+}
+
 .intro__container {
   padding-top: 8.75rem;
   padding-bottom: 6.25rem;
@@ -588,8 +607,13 @@ body {
       -ms-transform: translate(27%, -27%);
           transform: translate(27%, -27%);
   /* 200/740 */
-  -webkit-filter: blur(9.375rem);
-          filter: blur(9.375rem);
+  filter: blur(9.375rem);
+  -webkit-filter: blur(150px);
+  -webkit-backdrop-filter: blur(150px);
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
   border-radius: 50%;
   background-color: var(--accent);
 }
@@ -606,8 +630,13 @@ body {
   -webkit-transform: translate(-45%, 6.25rem);
       -ms-transform: translate(-45%, 6.25rem);
           transform: translate(-45%, 6.25rem);
-  -webkit-filter: blur(15.625rem);
-          filter: blur(15.625rem);
+  filter: blur(15.625rem);
+  -webkit-filter: blur(250px);
+  -webkit-backdrop-filter: blur(250px);
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
   border-radius: 50% 50% 46% 54%/58% 31% 69% 42%;
   background-color: var(--secondary);
 }
@@ -685,8 +714,13 @@ body {
       -ms-transform: translate(20%, 15%);
           transform: translate(20%, 15%);
   background-color: var(--secondary);
-  -webkit-filter: blur(7.5rem);
-          filter: blur(7.5rem);
+  filter: blur(7.5rem);
+  -webkit-filter: blur(120px);
+  -webkit-backdrop-filter: blur(120px);
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
 }
 
 .services__image {
@@ -1111,13 +1145,15 @@ body {
   }
 
   .services::before {
-    -webkit-filter: blur(6.25rem);
-            filter: blur(6.25rem);
+    filter: blur(6.25rem);
+    -webkit-filter: blur(100px);
+    -webkit-backdrop-filter: blur(100px);
   }
 
   .services::after {
-    -webkit-filter: blur(11.25rem);
-            filter: blur(11.25rem);
+    filter: blur(11.25rem);
+    -webkit-filter: blur(180px);
+    -webkit-backdrop-filter: blur(180px);
   }
 
   .services__logo {
@@ -1288,13 +1324,15 @@ body {
   }
 
   .services::before {
-    -webkit-filter: blur(3.75rem);
-            filter: blur(3.75rem);
+    filter: blur(3.75rem);
+    -webkit-filter: blur(60px);
+    -webkit-backdrop-filter: blur(60px);
   }
 
   .services::after {
-    -webkit-filter: blur(7.5rem);
-            filter: blur(7.5rem);
+    filter: blur(7.5rem);
+    -webkit-filter: blur(120px);
+    -webkit-backdrop-filter: blur(120px);
     -webkit-transform: translate(-45%, 3.125rem);
         -ms-transform: translate(-45%, 3.125rem);
             transform: translate(-45%, 3.125rem);
