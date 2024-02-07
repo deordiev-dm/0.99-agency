@@ -5,14 +5,14 @@
 	<title>0.99agency</title>
 	<meta charset="UTF-8">
 	<meta name="format-detection" content="telephone=no">
-	<link rel="stylesheet" href="css/style.min.css?_v=20240205172358">
+	<link rel="stylesheet" href="css/style.min.css?_v=20240207145541">
 	<link rel="shortcut icon" href="favicon.ico">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
 	<div class="wrapper">
-		<header data-scroll="30" class="header">
+		<header data-lp data-scroll="30" class="header">
 			<div class="header__container">
 
 				<div class="header__logo">
@@ -108,7 +108,7 @@
 					</div>
 
 					<div class="services__cards">
-						<article class="services__card card-services">
+						<article data-popup="#popup-strategy" class="services__card card-services">
 							<div class="card-services__wrapper">
 								<div class="card-services__number">01.</div>
 								<h3 class="card-services__title"><span>Стратегія</span></h3>
@@ -117,7 +117,7 @@
 								</p>
 							</div>
 						</article>
-						<article class="services__card card-services">
+						<article data-popup="#popup-key" class="services__card card-services">
 							<div class="card-services__wrapper">
 								<div class="card-services__number">02.</div>
 								<h3 class="card-services__title"><span>Під Ключ</span></h3>
@@ -126,7 +126,7 @@
 								</p>
 							</div>
 						</article>
-						<article class="services__card card-services">
+						<article data-popup="#popup-branding" class="services__card card-services">
 							<div class="card-services__wrapper">
 								<div class="card-services__number">03.</div>
 								<h3 class="card-services__title"><span>Брендинг</span></h3>
@@ -135,7 +135,7 @@
 								</p>
 							</div>
 						</article>
-						<article class="services__card card-services">
+						<article data-popup="#popup-traffic" class="services__card card-services">
 							<div class="card-services__wrapper">
 								<div class="card-services__number">04.</div>
 								<h3 class="card-services__title"><span>Трафік</span></h3>
@@ -144,7 +144,7 @@
 								</p>
 							</div>
 						</article>
-						<article class="services__card card-services">
+						<article data-popup="#popup-blog" class="services__card card-services">
 							<div class="card-services__wrapper">
 								<div class="card-services__number">05.</div>
 								<h3 class="card-services__title"><span>Упакування блогу</span></h3>
@@ -169,7 +169,202 @@
 			</div>
 		</footer>
 	</div>
-	<script src="js/app.min.js?_v=20240205172358"></script>
+	<div id="popup-strategy" aria-hidden="true" class="popup popup--strategy">
+		<div class="popup__wrapper">
+			<div class="popup__content">
+				<div class="popup__logo">
+					<picture><source srcset="img/services/logo-blurred.webp" type="image/webp"><img src="img/services/logo-blurred.png" alt=""></picture>
+				</div>
+				<div class="popup__number">
+					01
+				</div>
+				<div class="popup__image">
+					<picture><source srcset="img/services/strategy/woman.webp" type="image/webp"><img src="img/services/strategy/woman.png" alt=""></picture>
+				</div>
+				<button data-close type="button" class="popup__close">
+					<span></span>
+					<span></span>
+				</button>
+				<div class="popup__text">
+					<h2 class="popup__title">Стратегія</h2>
+					<div class="popup__cards">
+						<div class="popup__card card-popup">
+							<h3 class="card-popup__title"><span>За нами:</span></h3>
+							<ul class="card-popup__list">
+								<li class="card-popup__item">Аналітика сторінки</li>
+								<li class="card-popup__item">Розбір цільової аудиторії</li>
+								<li class="card-popup__item">Аналіз конкурентів</li>
+								<li class="card-popup__item">Створення візуалу з акцентом на продажі та підбір референсів для зйомки</li>
+								<li class="card-popup__item">Розробка контент-плану</li>
+								<li class="card-popup__item">Створення рекламної воронки продажів</li>
+								<li class="card-popup__item">Створення позиціювання та УТП</li>
+							</ul>
+						</div>
+						<div class="popup__card card-popup">
+							<h3 class="card-popup__title"><span>З вас:</span></h3>
+							<ul class="card-popup__list">
+								<li class="card-popup__item">Вести блог відповідно до стратегії</li>
+								<li class="card-popup__item">Отримувати стабільні продажі</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="popup-key" aria-hidden="true" class="popup popup--key">
+		<div class="popup__wrapper">
+			<div class="popup__content">
+				<div class="popup__logo">
+					<picture><source srcset="img/services/logo-blurred.webp" type="image/webp"><img src="img/services/logo-blurred.png" alt=""></picture>
+				</div>
+				<div class="popup__number">
+					02
+				</div>
+				<div class="popup__image">
+					<picture><source srcset="img/services/key/woman.webp" type="image/webp"><img src="img/services/key/woman.png" alt=""></picture>
+				</div>
+				<button data-close type="button" class="popup__close">
+					<span></span>
+					<span></span>
+				</button>
+				<div class="popup__text">
+					<h2 class="popup__title">під ключ</h2>
+					<div class="popup__cards">
+						<div class="popup__card card-popup">
+							<h3 class="card-popup__title"><span>За нами:</span></h3>
+							<ul class="card-popup__list">
+								<li class="card-popup__item">Все що входить в послугу «Стратегія»</li>
+								<li class="card-popup__item">Щоденне ведення профілю </li>
+								<li class="card-popup__item">Запуск реклами</li>
+							</ul>
+						</div>
+						<div class="popup__card card-popup">
+							<h3 class="card-popup__title"><span>З вас:</span></h3>
+							<ul class="card-popup__list">
+								<li class="card-popup__item">Насолоджуватися вільним часом та встигати обробляти замовлення</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="popup-branding" aria-hidden="true" class="popup popup--branding">
+		<div class="popup__wrapper">
+			<div class="popup__content">
+				<div class="popup__logo">
+					<picture><source srcset="img/services/logo-blurred.webp" type="image/webp"><img src="img/services/logo-blurred.png" alt=""></picture>
+				</div>
+				<div class="popup__number">
+					03
+				</div>
+				<div class="popup__image">
+					<picture><source srcset="img/services/branding/hands.webp" type="image/webp"><img src="img/services/branding/hands.png" alt=""></picture>
+				</div>
+				<button data-close type="button" class="popup__close">
+					<span></span>
+					<span></span>
+				</button>
+				<div class="popup__text">
+					<h2 class="popup__title">брендинг</h2>
+					<div class="popup__cards">
+						<div class="popup__card card-popup">
+							<h3 class="card-popup__title"><span>За нами:</span></h3>
+							<ul class="card-popup__list">
+								<li class="card-popup__item">Розробка айдентики та персонального стилю вашого бренду</li>
+							</ul>
+						</div>
+						<div class="popup__card card-popup">
+							<h3 class="card-popup__title"><span>З вас:</span></h3>
+							<ul class="card-popup__list">
+								<li class="card-popup__item">Бути унікальними та неповторними</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="popup-traffic" aria-hidden="true" class="popup popup--traffic">
+		<div class="popup__wrapper">
+			<div class="popup__content">
+				<div class="popup__logo">
+					<picture><source srcset="img/services/logo-blurred.webp" type="image/webp"><img src="img/services/logo-blurred.png" alt=""></picture>
+				</div>
+				<div class="popup__number">
+					04
+				</div>
+				<div class="popup__image">
+					<picture><source srcset="img/services/traffic/woman.webp" type="image/webp"><img src="img/services/traffic/woman.png" alt=""></picture>
+				</div>
+				<button data-close type="button" class="popup__close">
+					<span></span>
+					<span></span>
+				</button>
+				<div class="popup__text">
+					<h2 class="popup__title">трафік</h2>
+					<div class="popup__cards">
+						<div class="popup__card card-popup">
+							<h3 class="card-popup__title"><span>За нами:</span></h3>
+							<ul class="card-popup__list">
+								<li class="card-popup__item">Аналіз цільової аудиторії та конкурентів</li>
+								<li class="card-popup__item">Розробка рекламної стратегії</li>
+								<li class="card-popup__item"> Запуск реклами</li>
+							</ul>
+						</div>
+						<div class="popup__card card-popup">
+							<h3 class="card-popup__title"><span>З вас:</span></h3>
+							<ul class="card-popup__list">
+								<li class="card-popup__item">Головне - встигати обробляти замовлення</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="popup-blog" aria-hidden="true" class="popup popup--blog">
+		<div class="popup__wrapper">
+			<div class="popup__content">
+				<div class="popup__logo">
+					<picture><source srcset="img/services/logo-blurred.webp" type="image/webp"><img src="img/services/logo-blurred.png" alt=""></picture>
+				</div>
+				<div class="popup__number">
+					05
+				</div>
+				<div class="popup__image">
+					<picture><source srcset="img/intro/woman.webp" type="image/webp"><img src="img/intro/woman.png" alt=""></picture>
+				</div>
+				<button data-close type="button" class="popup__close">
+					<span></span>
+					<span></span>
+				</button>
+				<div class="popup__text">
+					<h2 class="popup__title">упакування блогу</h2>
+					<div class="popup__cards">
+						<div class="popup__card card-popup">
+							<h3 class="card-popup__title"><span>За нами:</span></h3>
+							<ul class="card-popup__list">
+								<li class="card-popup__item">Створення візуалу та концепції вашого бренду</li>
+							</ul>
+						</div>
+						<div class="popup__card card-popup">
+							<h3 class="card-popup__title"><span>З вас:</span></h3>
+							<ul class="card-popup__list">
+								<li class="card-popup__item">Вести неймовірно упакований блог</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="js/app.min.js?_v=20240207145541"></script>
 </body>
 
 </html>
