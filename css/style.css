@@ -520,9 +520,6 @@ body::after {
           animation: star-rotate-opposite 8s linear infinite;
 }
 
-.no-webp .popup--strategy .popup__cards > :nth-child(1)::after {
-  background: url("../img/decore/more-growth-yellow.png") no-repeat; }
-
 .popup--strategy .popup__cards > :nth-child(1)::after {
   content: "";
   position: absolute;
@@ -531,6 +528,7 @@ body::after {
       -ms-transform: translateY(-40%);
           transform: translateY(-40%);
   width: 6.25rem;
+  background: url("../img/decore/more-growth-yellow.webp") no-repeat;
 }
 
 .popup--strategy .popup__cards > :nth-child(2) {
@@ -572,9 +570,6 @@ body::after {
           animation: star-rotate-opposite 8s linear infinite;
 }
 
-.no-webp .popup--key .popup__cards > :nth-child(1)::after {
-  background: url("../img/decore/more-growth-white.png") no-repeat; }
-
 .popup--key .popup__cards > :nth-child(1)::after {
   content: "";
   position: absolute;
@@ -582,6 +577,7 @@ body::after {
   -webkit-transform: translate(25%, 25%);
       -ms-transform: translate(25%, 25%);
           transform: translate(25%, 25%);
+  background: url("../img/decore/more-growth-white.webp") no-repeat;
 }
 
 .popup--key .popup__cards > :nth-child(2) {
@@ -619,9 +615,6 @@ body::after {
           animation: star-rotate-opposite 8s linear infinite;
 }
 
-.no-webp .popup--branding .popup__cards > :nth-child(1)::after {
-  background: url("../img/decore/more-growth-yellow.png") no-repeat; }
-
 .popup--branding .popup__cards > :nth-child(1)::after {
   content: "";
   position: absolute;
@@ -630,6 +623,7 @@ body::after {
       -ms-transform: translate(50%, -50%);
           transform: translate(50%, -50%);
   width: 6.25rem;
+  background: url("../img/decore/more-growth-yellow.webp") no-repeat;
 }
 
 .popup--branding .popup__cards > :nth-child(2) {
@@ -671,9 +665,6 @@ body::after {
           animation: star-rotate-opposite 8s linear infinite;
 }
 
-.no-webp .popup--traffic .popup__cards > :nth-child(1)::after {
-  background: url("../img/decore/more-growth-white.png") no-repeat; }
-
 .popup--traffic .popup__cards > :nth-child(1)::after {
   content: "";
   position: absolute;
@@ -682,6 +673,7 @@ body::after {
       -ms-transform: translate(30%, -50%);
           transform: translate(30%, -50%);
   width: 6.25rem;
+  background: url("../img/decore/more-growth-white.webp") no-repeat;
 }
 
 .popup--traffic .popup__cards > :nth-child(2) {
@@ -731,9 +723,6 @@ body::after {
   border-top-left-radius: 2.8125rem;
 }
 
-.no-webp .popup--blog .popup__cards > :nth-child(2)::after {
-  background: url("../img/decore/more-than-marketing-yellow.png") no-repeat; }
-
 .popup--blog .popup__cards > :nth-child(2)::after {
   content: "";
   position: absolute;
@@ -743,6 +732,7 @@ body::after {
       -ms-transform: translate(30%, -30%);
           transform: translate(30%, -30%);
   height: 4.375rem;
+  background: url("../img/decore/more-than-marketing-yellow.webp") no-repeat;
 }
 
 .ibg {
@@ -4172,15 +4162,5 @@ body::after {
     left: 0;
   }
 }
-
-.webp .popup--strategy .popup__cards > :nth-child(1)::after { background: url(../img/decore/more-growth-yellow.webp) no-repeat; }
-
-.webp .popup--key .popup__cards > :nth-child(1)::after { background: url(../img/decore/more-growth-white.webp) no-repeat; }
-
-.webp .popup--branding .popup__cards > :nth-child(1)::after { background: url(../img/decore/more-growth-yellow.webp) no-repeat; }
-
-.webp .popup--traffic .popup__cards > :nth-child(1)::after { background: url(../img/decore/more-growth-white.webp) no-repeat; }
-
-.webp .popup--blog .popup__cards > :nth-child(2)::after { background: url(../img/decore/more-than-marketing-yellow.webp) no-repeat; }
 
 .webp .header-services__title::before { background-image: url(../img/services/marketing.webp); }
