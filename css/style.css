@@ -340,6 +340,7 @@ body::after {
 
 .popup__close {
   position: absolute;
+  z-index: 3;
   width: 1.875rem;
   height: 1.875rem;
 }
@@ -396,7 +397,7 @@ body::after {
 
 .popup__text {
   position: relative;
-  z-index: 10;
+  z-index: 2;
 }
 
 .popup__title {
