@@ -1177,9 +1177,10 @@ body::after {
   aspect-ratio: 402/857;
   bottom: 0;
   left: 0;
-  -webkit-transform: translate(-10%, 0%);
-      -ms-transform: translate(-10%, 0%);
-          transform: translate(-10%, 0%);
+  -webkit-transform: translate(-20%, 20%);
+      -ms-transform: translate(-20%, 20%);
+          transform: translate(-20%, 20%);
+  opacity: 0.1;
 }
 
 .services__container {
