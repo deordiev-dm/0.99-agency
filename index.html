@@ -5,7 +5,7 @@
 	<title>0.99agency</title>
 	<meta charset="UTF-8">
 	<meta name="format-detection" content="telephone=no">
-	<link rel="stylesheet" href="css/style.min.css?_v=20240213151048">
+	<link rel="stylesheet" href="css/style.min.css?_v=20240218210757">
 	<link rel="icon" href="favicon.ico" sizes="32x32">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -22,19 +22,20 @@
 				<nav class="header__menu menu">
 					<ul class="menu__list">
 						<li class="menu__item">
-							<a href="#" class="menu__link link-header _active">Головна</a>
+							<a href="#" data-goto=".main-intro__title" data-goto-header data-goto-top="50" class="menu__link link-header">Головна</a>
 						</li>
 						<li class="menu__item">
-							<a href="#" class="menu__link link-header">Послуги</a>
+							<a href="#" data-goto=".header-services__title" data-goto-header data-goto-top="50" class="menu__link link-header">Послуги</a>
 						</li>
 						<li class="menu__item">
-							<a href="#" class="menu__link link-header">Навчання</a>
+							<a href="#" data-goto=".study__title" data-goto-header data-goto-top="50" class="menu__link link-header">Навчання</a>
 						</li>
 						<li class="menu__item">
-							<a href="#" class="menu__link link-header">Кейси</a>
+							<a href="#" data-goto=".niches__title" data-goto-header data-goto-top="50" class="menu__link link-header">Наші
+								ніші</a>
 						</li>
 						<li class="menu__item">
-							<a href="#" class="menu__link link-header">Контакти</a>
+							<a href="#" data-goto=".header-consultation__title" data-goto-header data-goto-top="50" class="menu__link link-header">Консультація</a>
 						</li>
 					</ul>
 				</nav>
@@ -65,7 +66,7 @@
 							<div class="main-intro__image main-intro__image-rigth-bottom">
 								<picture><source srcset="img/intro/couple.webp" type="image/webp"><img data-prlx-mouse data-prlx-a="25" data-prlx-dxy data-prlx-dyr src="img/intro/couple.png" alt="couple riding on a scooter"></picture>
 							</div>
-							<h1 class="main-intro__title">0.99 AGENCY</h1>
+							<h1 class="main-intro__title" data-watch="navigator">0.99 AGENCY</h1>
 							<p class="main-intro__subtitle">більше ніж маркетинг</p>
 						</div>
 					</div>
@@ -102,7 +103,7 @@
 			<section class="page__services services">
 				<div class="services__container">
 					<div class="services__header header-services">
-						<h2 class="header-services__title title">
+						<h2 class="header-services__title title" data-watch="navigator">
 							послуги
 						</h2>
 					</div>
@@ -164,7 +165,7 @@
 			</section>
 			<section class="page__study study">
 				<div class="study__container">
-					<h2 class="study__title title-bordered"><span>Навчання</span></h2>
+					<h2 class="study__title title-bordered" data-watch="navigator"><span>Навчання</span></h2>
 					<div class="study__content">
 						<div class="study__photo">
 							<picture><source srcset="img/study/dasha.webp" type="image/webp"><img src="img/study/dasha.jpeg" alt="Stadnichenko Dariia"></picture>
@@ -201,7 +202,7 @@
 			<section class="page__niches niches">
 				<div class="niches__container">
 					<div class="niches__header">
-						<h2 class="niches__title title">Наші ніші</h2>
+						<h2 class="niches__title title" data-watch="navigator">Наші ніші</h2>
 					</div>
 
 					<div class="niches__slider swiper">
@@ -287,9 +288,86 @@
 
 				</div>
 			</section>
+			<section class="page__consultation consultation">
+				<div class="consultation__container">
+					<div class="consultation__header header-consultation">
+						<h2 class="header-consultation__title title" data-watch="navigator">
+							<div>Безкоштовна</div>
+							<div class="title-bordered"><span>консультація</span></div>
+						</h2>
+					</div>
+					<div class="consultation__body body-consultation">
+						<div class="body-consultation__card card-consultation">
+							<div class="card-consultation__socials socials-consult">
+								<a href='#' class="socials-consult__item _icon-tiktok"></a>
+								<a href='#' class="socials-consult__item _icon-inst"></a>
+							</div>
+							<div class="card-consultation__text">
+								<p>У наших соціальних мережах ви дізнаєтесь про: </p>
+								<ul class="card-consultation__list">
+									<li>Актуальні <span>курси</span> та <span>інтенсиви</span></li>
+									<li>Нашу <span>команду</span> та <span>кейси</span></li>
+									<li><span>Лайфхаки</span> розвитку блогу та ще багато чого!</li>
+								</ul>
+							</div>
+						</div>
+
+						<!-- action="files/sendmail/sendmail.php" -->
+						<!-- action="https://postman-echo.com/post" -->
+						<!-- data-dev -->
+
+						<form class="body-consultation__form form" data-ajax data-goto-error action="files/sendmail/sendmail.php" method="POST">
+							<div class="form__row">
+								<input type="text" id="form_name" name="form_name" data-required data-error="Будь ласка, введіть своє ім'я" class="form__input input">
+								<label for="form_name" class="form__label">Ім'я<span class="required-star">*</span></label>
+							</div>
+
+							<div class="form__row">
+								<input type="tel" id="form_tel" name="form_tel" data-required data-error="Будь ласка, вкажіть номер телефону" class="form__input input">
+								<label for="form_tel" class="form__label">номер телефону<span class="required-star">*</span></label>
+							</div>
+
+							<div class="form__row">
+								<input type="text" id="form_email" name="form_email" data-required="email" data-error="Невірний формат пошти." class="form__input input">
+								<label for="form_email" class="form__label">пошта<span class="required-star">*</span></label>
+							</div>
+
+							<div class="form__row">
+								<select name="form_service" data-class-modif="service" data-label data-required>
+									<option value="">Оберіть послугу</option>
+									<option value="strategy">Стратегія</option>
+									<option value="pid klucz">Під ключ</option>
+									<option value="branding">Брендинг</option>
+									<option value="trafic">Трафік</option>
+									<option value="upakuvannya blogu">Упакування блогу</option>
+								</select>
+							</div>
+
+							<div class="form__row">
+								<textarea name="form_message" id="form_message" class="form__input input form__input--textarea" data-autoheight data-autoheight-min='120' data-autoheight-min='300'></textarea>
+								<label for="form_message" class="form__label form__label--textarea">повідомлення</label>
+							</div>
+
+							<div class="form__row form__row--btn">
+								<div class="form__btn-wrapper">
+									<button type="submit" class="form__button"><span>Надіслати</span></button>
+								</div>
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</section>
 		</main>
 		<footer class="footer">
 			<div class="footer__container">
+				<div class="footer__top">
+					<div class="footer__logo"><picture><source srcset="img/logo-original.webp" type="image/webp"><img src="img/logo-original.png" alt="0.99agency"></picture></div>
+					<button type="button" class="footer__button _icon-arrow" data-goto=".intro"></button>
+				</div>
+				<div class="footer__bottom">
+					0.99 AGENCY 2024-2027
+				</div>
 			</div>
 		</footer>
 	</div>
@@ -297,7 +375,7 @@
 		<div class="popup__wrapper">
 			<div class="popup__content">
 				<div class="popup__logo">
-					<picture><source srcset="img/services/logo-blurred.webp" type="image/webp"><img src="img/services/logo-blurred.png" alt=""></picture>
+					<picture><source srcset="img/blue-logo.webp" type="image/webp"><img src="img/blue-logo.png" alt=""></picture>
 				</div>
 				<div class="popup__number">
 					01
@@ -341,7 +419,7 @@
 		<div class="popup__wrapper">
 			<div class="popup__content">
 				<div class="popup__logo">
-					<picture><source srcset="img/services/logo-blurred.webp" type="image/webp"><img src="img/services/logo-blurred.png" alt=""></picture>
+					<picture><source srcset="img/blue-logo.webp" type="image/webp"><img src="img/blue-logo.png" alt=""></picture>
 				</div>
 				<div class="popup__number">
 					02
@@ -380,7 +458,7 @@
 		<div class="popup__wrapper">
 			<div class="popup__content">
 				<div class="popup__logo">
-					<picture><source srcset="img/services/logo-blurred.webp" type="image/webp"><img src="img/services/logo-blurred.png" alt=""></picture>
+					<picture><source srcset="img/blue-logo.webp" type="image/webp"><img src="img/blue-logo.png" alt=""></picture>
 				</div>
 				<div class="popup__number">
 					03
@@ -417,7 +495,7 @@
 		<div class="popup__wrapper">
 			<div class="popup__content">
 				<div class="popup__logo">
-					<picture><source srcset="img/services/logo-blurred.webp" type="image/webp"><img src="img/services/logo-blurred.png" alt=""></picture>
+					<picture><source srcset="img/blue-logo.webp" type="image/webp"><img src="img/blue-logo.png" alt=""></picture>
 				</div>
 				<div class="popup__number">
 					04
@@ -456,7 +534,7 @@
 		<div class="popup__wrapper">
 			<div class="popup__content">
 				<div class="popup__logo">
-					<picture><source srcset="img/services/logo-blurred.webp" type="image/webp"><img src="img/services/logo-blurred.png" alt=""></picture>
+					<picture><source srcset="img/blue-logo.webp" type="image/webp"><img src="img/blue-logo.png" alt=""></picture>
 				</div>
 				<div class="popup__number">
 					05
@@ -488,7 +566,7 @@
 			</div>
 		</div>
 	</div>
-	<script src="js/app.min.js?_v=20240213151048"></script>
+	<script src="js/app.min.js?_v=20240218210757"></script>
 </body>
 
 </html>

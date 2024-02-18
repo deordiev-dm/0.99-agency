@@ -1,6 +1,6 @@
 (() => {
     "use strict";
-    const modules_flsModules = {};
+    const flsModules = {};
     function isWebp() {
         function testWebP(callback) {
             let webP = new Image;
@@ -21,6 +21,78 @@
             }), 0);
         }));
     }
+    function getHash() {
+        if (location.hash) return location.hash.replace("#", "");
+    }
+    let _slideUp = (target, duration = 500, showmore = 0) => {
+        if (!target.classList.contains("_slide")) {
+            target.classList.add("_slide");
+            target.style.transitionProperty = "height, margin, padding";
+            target.style.transitionDuration = duration + "ms";
+            target.style.height = `${target.offsetHeight}px`;
+            target.offsetHeight;
+            target.style.overflow = "hidden";
+            target.style.height = showmore ? `${showmore}px` : `0px`;
+            target.style.paddingTop = 0;
+            target.style.paddingBottom = 0;
+            target.style.marginTop = 0;
+            target.style.marginBottom = 0;
+            window.setTimeout((() => {
+                target.hidden = !showmore ? true : false;
+                !showmore ? target.style.removeProperty("height") : null;
+                target.style.removeProperty("padding-top");
+                target.style.removeProperty("padding-bottom");
+                target.style.removeProperty("margin-top");
+                target.style.removeProperty("margin-bottom");
+                !showmore ? target.style.removeProperty("overflow") : null;
+                target.style.removeProperty("transition-duration");
+                target.style.removeProperty("transition-property");
+                target.classList.remove("_slide");
+                document.dispatchEvent(new CustomEvent("slideUpDone", {
+                    detail: {
+                        target
+                    }
+                }));
+            }), duration);
+        }
+    };
+    let _slideDown = (target, duration = 500, showmore = 0) => {
+        if (!target.classList.contains("_slide")) {
+            target.classList.add("_slide");
+            target.hidden = target.hidden ? false : null;
+            showmore ? target.style.removeProperty("height") : null;
+            let height = target.offsetHeight;
+            target.style.overflow = "hidden";
+            target.style.height = showmore ? `${showmore}px` : `0px`;
+            target.style.paddingTop = 0;
+            target.style.paddingBottom = 0;
+            target.style.marginTop = 0;
+            target.style.marginBottom = 0;
+            target.offsetHeight;
+            target.style.transitionProperty = "height, margin, padding";
+            target.style.transitionDuration = duration + "ms";
+            target.style.height = height + "px";
+            target.style.removeProperty("padding-top");
+            target.style.removeProperty("padding-bottom");
+            target.style.removeProperty("margin-top");
+            target.style.removeProperty("margin-bottom");
+            window.setTimeout((() => {
+                target.style.removeProperty("height");
+                target.style.removeProperty("overflow");
+                target.style.removeProperty("transition-duration");
+                target.style.removeProperty("transition-property");
+                target.classList.remove("_slide");
+                document.dispatchEvent(new CustomEvent("slideDownDone", {
+                    detail: {
+                        target
+                    }
+                }));
+            }), duration);
+        }
+    };
+    let _slideToggle = (target, duration = 500) => {
+        if (target.hidden) return _slideDown(target, duration); else return _slideUp(target, duration);
+    };
     let bodyLockStatus = true;
     let bodyLockToggle = (delay = 500) => {
         if (document.documentElement.classList.contains("lock")) bodyUnlock(delay); else bodyLock(delay);
@@ -67,7 +139,11 @@
             }
         }));
     }
-    function functions_FLS(message) {
+    function menuClose() {
+        bodyUnlock();
+        document.documentElement.classList.remove("menu-open");
+    }
+    function FLS(message) {
         setTimeout((() => {
             if (window.FLS) console.log(message);
         }), 0);
@@ -322,10 +398,10 @@
             if (!this.isOpen && this.lastFocusEl) this.lastFocusEl.focus(); else focusable[0].focus();
         }
         popupLogging(message) {
-            this.options.logging ? functions_FLS(`[Попапос]: ${message}`) : null;
+            this.options.logging ? FLS(`[Попапос]: ${message}`) : null;
         }
     }
-    modules_flsModules.popup = new Popup({});
+    flsModules.popup = new Popup({});
     class MousePRLX {
         constructor(props, data = null) {
             let defaultConfig = {
@@ -377,10 +453,593 @@
             }));
         }
         setLogging(message) {
-            this.config.logging ? functions_FLS(`[PRLX Mouse]: ${message}`) : null;
+            this.config.logging ? FLS(`[PRLX Mouse]: ${message}`) : null;
         }
     }
-    modules_flsModules.mousePrlx = new MousePRLX({});
+    flsModules.mousePrlx = new MousePRLX({});
+    let gotoBlock = (targetBlock, noHeader = false, speed = 500, offsetTop = 50) => {
+        const targetBlockElement = document.querySelector(targetBlock);
+        if (targetBlockElement) {
+            let headerItem = "";
+            let headerItemHeight = 0;
+            if (noHeader) {
+                headerItem = "header.header";
+                const headerElement = document.querySelector(headerItem);
+                if (!headerElement.classList.contains("_header-scroll")) {
+                    headerElement.style.cssText = `transition-duration: 0s;`;
+                    headerElement.classList.add("_header-scroll");
+                    headerItemHeight = headerElement.offsetHeight;
+                    headerElement.classList.remove("_header-scroll");
+                    setTimeout((() => {
+                        headerElement.style.cssText = ``;
+                    }), 0);
+                } else headerItemHeight = headerElement.offsetHeight;
+            }
+            let options = {
+                speedAsDuration: true,
+                speed,
+                header: headerItem,
+                offset: offsetTop,
+                easing: "easeOutQuad"
+            };
+            document.documentElement.classList.contains("menu-open") ? menuClose() : null;
+            if (typeof SmoothScroll !== "undefined") (new SmoothScroll).animateScroll(targetBlockElement, "", options); else {
+                let targetBlockElementPosition = targetBlockElement.getBoundingClientRect().top + scrollY;
+                targetBlockElementPosition = headerItemHeight ? targetBlockElementPosition - headerItemHeight : targetBlockElementPosition;
+                targetBlockElementPosition = offsetTop ? targetBlockElementPosition - offsetTop : targetBlockElementPosition;
+                window.scrollTo({
+                    top: targetBlockElementPosition,
+                    behavior: "smooth"
+                });
+            }
+            FLS(`[gotoBlock]: Юхуу...їдемо до ${targetBlock}`);
+        } else FLS(`[gotoBlock]: Йой... Такого блоку немає на сторінці: ${targetBlock}`);
+    };
+    function formFieldsInit(options = {
+        viewPass: false,
+        autoHeight: false
+    }) {
+        document.body.addEventListener("focusin", (function(e) {
+            const targetElement = e.target;
+            if (targetElement.tagName === "INPUT" || targetElement.tagName === "TEXTAREA") {
+                if (!targetElement.hasAttribute("data-no-focus-classes")) {
+                    targetElement.classList.add("_form-focus");
+                    targetElement.parentElement.classList.add("_form-focus");
+                }
+                formValidate.removeError(targetElement);
+                targetElement.hasAttribute("data-validate") ? formValidate.removeError(targetElement) : null;
+            }
+        }));
+        document.body.addEventListener("focusout", (function(e) {
+            const targetElement = e.target;
+            if (targetElement.tagName === "INPUT" || targetElement.tagName === "TEXTAREA") {
+                if (!targetElement.hasAttribute("data-no-focus-classes")) {
+                    targetElement.classList.remove("_form-focus");
+                    targetElement.parentElement.classList.remove("_form-focus");
+                }
+                targetElement.hasAttribute("data-validate") ? formValidate.validateInput(targetElement) : null;
+            }
+        }));
+        if (options.viewPass) document.addEventListener("click", (function(e) {
+            let targetElement = e.target;
+            if (targetElement.closest('[class*="__viewpass"]')) {
+                let inputType = targetElement.classList.contains("_viewpass-active") ? "password" : "text";
+                targetElement.parentElement.querySelector("input").setAttribute("type", inputType);
+                targetElement.classList.toggle("_viewpass-active");
+            }
+        }));
+        if (options.autoHeight) {
+            const textareas = document.querySelectorAll("textarea[data-autoheight]");
+            if (textareas.length) {
+                textareas.forEach((textarea => {
+                    const startHeight = textarea.hasAttribute("data-autoheight-min") ? Number(textarea.dataset.autoheightMin) : Number(textarea.offsetHeight);
+                    const maxHeight = textarea.hasAttribute("data-autoheight-max") ? Number(textarea.dataset.autoheightMax) : 1 / 0;
+                    setHeight(textarea, Math.min(startHeight, maxHeight));
+                    textarea.addEventListener("input", (() => {
+                        if (textarea.scrollHeight > startHeight) {
+                            textarea.style.height = `auto`;
+                            setHeight(textarea, Math.min(Math.max(textarea.scrollHeight, startHeight), maxHeight));
+                        }
+                    }));
+                }));
+                function setHeight(textarea, height) {
+                    textarea.style.height = `${height}px`;
+                }
+            }
+        }
+    }
+    let formValidate = {
+        getErrors(form) {
+            let error = 0;
+            let formRequiredItems = form.querySelectorAll("*[data-required]");
+            if (formRequiredItems.length) formRequiredItems.forEach((formRequiredItem => {
+                if ((formRequiredItem.offsetParent !== null || formRequiredItem.tagName === "SELECT") && !formRequiredItem.disabled) error += this.validateInput(formRequiredItem);
+            }));
+            return error;
+        },
+        validateInput(formRequiredItem) {
+            let error = 0;
+            if (formRequiredItem.dataset.required === "email") {
+                formRequiredItem.value = formRequiredItem.value.replace(" ", "");
+                if (this.emailTest(formRequiredItem)) {
+                    this.addError(formRequiredItem);
+                    error++;
+                } else this.removeError(formRequiredItem);
+            } else if (formRequiredItem.type === "checkbox" && !formRequiredItem.checked) {
+                this.addError(formRequiredItem);
+                error++;
+            } else if (!formRequiredItem.value.trim()) {
+                this.addError(formRequiredItem);
+                error++;
+            } else this.removeError(formRequiredItem);
+            return error;
+        },
+        addError(formRequiredItem) {
+            formRequiredItem.classList.add("_form-error");
+            formRequiredItem.parentElement.classList.add("_form-error");
+            let inputError = formRequiredItem.parentElement.querySelector(".form__error");
+            if (inputError) formRequiredItem.parentElement.removeChild(inputError);
+            if (formRequiredItem.dataset.error) formRequiredItem.parentElement.insertAdjacentHTML("beforeend", `<div class="form__error">${formRequiredItem.dataset.error}</div>`);
+        },
+        removeError(formRequiredItem) {
+            formRequiredItem.classList.remove("_form-error");
+            formRequiredItem.parentElement.classList.remove("_form-error");
+            if (formRequiredItem.parentElement.querySelector(".form__error")) formRequiredItem.parentElement.removeChild(formRequiredItem.parentElement.querySelector(".form__error"));
+        },
+        formClean(form) {
+            form.reset();
+            setTimeout((() => {
+                let inputs = form.querySelectorAll("input,textarea");
+                for (let index = 0; index < inputs.length; index++) {
+                    const el = inputs[index];
+                    el.parentElement.classList.remove("_form-focus");
+                    el.classList.remove("_form-focus");
+                    formValidate.removeError(el);
+                }
+                let checkboxes = form.querySelectorAll(".checkbox__input");
+                if (checkboxes.length > 0) for (let index = 0; index < checkboxes.length; index++) {
+                    const checkbox = checkboxes[index];
+                    checkbox.checked = false;
+                }
+                if (flsModules.select) {
+                    let selects = form.querySelectorAll(".select");
+                    if (selects.length) for (let index = 0; index < selects.length; index++) {
+                        const select = selects[index].querySelector("select");
+                        flsModules.select.selectBuild(select);
+                    }
+                }
+            }), 0);
+        },
+        emailTest(formRequiredItem) {
+            return !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,8})+$/.test(formRequiredItem.value);
+        }
+    };
+    function formSubmit() {
+        const forms = document.forms;
+        if (forms.length) for (const form of forms) {
+            form.addEventListener("submit", (function(e) {
+                const form = e.target;
+                formSubmitAction(form, e);
+            }));
+            form.addEventListener("reset", (function(e) {
+                const form = e.target;
+                formValidate.formClean(form);
+            }));
+        }
+        async function formSubmitAction(form, e) {
+            const error = !form.hasAttribute("data-no-validate") ? formValidate.getErrors(form) : 0;
+            if (error === 0) {
+                const ajax = form.hasAttribute("data-ajax");
+                if (ajax) {
+                    e.preventDefault();
+                    const formAction = form.getAttribute("action") ? form.getAttribute("action").trim() : "#";
+                    const formMethod = form.getAttribute("method") ? form.getAttribute("method").trim() : "GET";
+                    const formData = new FormData(form);
+                    form.classList.add("_sending");
+                    const response = await fetch(formAction, {
+                        method: formMethod,
+                        body: formData
+                    });
+                    if (response.ok) {
+                        let responseResult = await response.json();
+                        form.classList.remove("_sending");
+                        formSent(form, responseResult);
+                    } else {
+                        alert("Помилка");
+                        form.classList.remove("_sending");
+                    }
+                } else if (form.hasAttribute("data-dev")) {
+                    e.preventDefault();
+                    formSent(form);
+                }
+            } else {
+                e.preventDefault();
+                if (form.querySelector("._form-error") && form.hasAttribute("data-goto-error")) {
+                    const formGoToErrorClass = form.dataset.gotoError ? form.dataset.gotoError : "._form-error";
+                    gotoBlock(formGoToErrorClass, true, 1e3);
+                }
+            }
+        }
+        function formSent(form, responseResult = ``) {
+            document.dispatchEvent(new CustomEvent("formSent", {
+                detail: {
+                    form
+                }
+            }));
+            setTimeout((() => {
+                if (flsModules.popup) {
+                    const popup = form.dataset.popupMessage;
+                    popup ? flsModules.popup.open(popup) : null;
+                }
+            }), 0);
+            formValidate.formClean(form);
+            formLogging(`Форму відправлено!`);
+        }
+        function formLogging(message) {
+            FLS(`[Форми]: ${message}`);
+        }
+    }
+    class SelectConstructor {
+        constructor(props, data = null) {
+            let defaultConfig = {
+                init: true,
+                logging: true,
+                speed: 150
+            };
+            this.config = Object.assign(defaultConfig, props);
+            this.selectClasses = {
+                classSelect: "select",
+                classSelectBody: "select__body",
+                classSelectTitle: "select__title",
+                classSelectValue: "select__value",
+                classSelectLabel: "select__label",
+                classSelectInput: "select__input",
+                classSelectText: "select__text",
+                classSelectLink: "select__link",
+                classSelectOptions: "select__options",
+                classSelectOptionsScroll: "select__scroll",
+                classSelectOption: "select__option",
+                classSelectContent: "select__content",
+                classSelectRow: "select__row",
+                classSelectData: "select__asset",
+                classSelectDisabled: "_select-disabled",
+                classSelectTag: "_select-tag",
+                classSelectOpen: "_select-open",
+                classSelectActive: "_select-active",
+                classSelectFocus: "_select-focus",
+                classSelectMultiple: "_select-multiple",
+                classSelectCheckBox: "_select-checkbox",
+                classSelectOptionSelected: "_select-selected",
+                classSelectPseudoLabel: "_select-pseudo-label"
+            };
+            this._this = this;
+            if (this.config.init) {
+                const selectItems = data ? document.querySelectorAll(data) : document.querySelectorAll("select");
+                if (selectItems.length) {
+                    this.selectsInit(selectItems);
+                    this.setLogging(`Прокинувся, построїв селектов: (${selectItems.length})`);
+                } else this.setLogging("Сплю, немає жодного select");
+            }
+        }
+        getSelectClass(className) {
+            return `.${className}`;
+        }
+        getSelectElement(selectItem, className) {
+            return {
+                originalSelect: selectItem.querySelector("select"),
+                selectElement: selectItem.querySelector(this.getSelectClass(className))
+            };
+        }
+        selectsInit(selectItems) {
+            selectItems.forEach(((originalSelect, index) => {
+                this.selectInit(originalSelect, index + 1);
+            }));
+            document.addEventListener("click", function(e) {
+                this.selectsActions(e);
+            }.bind(this));
+            document.addEventListener("keydown", function(e) {
+                this.selectsActions(e);
+            }.bind(this));
+            document.addEventListener("focusin", function(e) {
+                this.selectsActions(e);
+            }.bind(this));
+            document.addEventListener("focusout", function(e) {
+                this.selectsActions(e);
+            }.bind(this));
+        }
+        selectInit(originalSelect, index) {
+            const _this = this;
+            let selectItem = document.createElement("div");
+            selectItem.classList.add(this.selectClasses.classSelect);
+            originalSelect.parentNode.insertBefore(selectItem, originalSelect);
+            selectItem.appendChild(originalSelect);
+            originalSelect.hidden = true;
+            index ? originalSelect.dataset.id = index : null;
+            if (this.getSelectPlaceholder(originalSelect)) {
+                originalSelect.dataset.placeholder = this.getSelectPlaceholder(originalSelect).value;
+                if (this.getSelectPlaceholder(originalSelect).label.show) {
+                    const selectItemTitle = this.getSelectElement(selectItem, this.selectClasses.classSelectTitle).selectElement;
+                    selectItemTitle.insertAdjacentHTML("afterbegin", `<span class="${this.selectClasses.classSelectLabel}">${this.getSelectPlaceholder(originalSelect).label.text ? this.getSelectPlaceholder(originalSelect).label.text : this.getSelectPlaceholder(originalSelect).value}</span>`);
+                }
+            }
+            selectItem.insertAdjacentHTML("beforeend", `<div class="${this.selectClasses.classSelectBody}"><div hidden class="${this.selectClasses.classSelectOptions}"></div></div>`);
+            this.selectBuild(originalSelect);
+            originalSelect.dataset.speed = originalSelect.dataset.speed ? originalSelect.dataset.speed : this.config.speed;
+            this.config.speed = +originalSelect.dataset.speed;
+            originalSelect.addEventListener("change", (function(e) {
+                _this.selectChange(e);
+            }));
+        }
+        selectBuild(originalSelect) {
+            const selectItem = originalSelect.parentElement;
+            selectItem.dataset.id = originalSelect.dataset.id;
+            originalSelect.dataset.classModif ? selectItem.classList.add(`select_${originalSelect.dataset.classModif}`) : null;
+            originalSelect.multiple ? selectItem.classList.add(this.selectClasses.classSelectMultiple) : selectItem.classList.remove(this.selectClasses.classSelectMultiple);
+            originalSelect.hasAttribute("data-checkbox") && originalSelect.multiple ? selectItem.classList.add(this.selectClasses.classSelectCheckBox) : selectItem.classList.remove(this.selectClasses.classSelectCheckBox);
+            this.setSelectTitleValue(selectItem, originalSelect);
+            this.setOptions(selectItem, originalSelect);
+            originalSelect.hasAttribute("data-search") ? this.searchActions(selectItem) : null;
+            originalSelect.hasAttribute("data-open") ? this.selectAction(selectItem) : null;
+            this.selectDisabled(selectItem, originalSelect);
+        }
+        selectsActions(e) {
+            const targetElement = e.target;
+            const targetType = e.type;
+            if (targetElement.closest(this.getSelectClass(this.selectClasses.classSelect)) || targetElement.closest(this.getSelectClass(this.selectClasses.classSelectTag))) {
+                const selectItem = targetElement.closest(".select") ? targetElement.closest(".select") : document.querySelector(`.${this.selectClasses.classSelect}[data-id="${targetElement.closest(this.getSelectClass(this.selectClasses.classSelectTag)).dataset.selectId}"]`);
+                const originalSelect = this.getSelectElement(selectItem).originalSelect;
+                if (targetType === "click") {
+                    if (!originalSelect.disabled) if (targetElement.closest(this.getSelectClass(this.selectClasses.classSelectTag))) {
+                        const targetTag = targetElement.closest(this.getSelectClass(this.selectClasses.classSelectTag));
+                        const optionItem = document.querySelector(`.${this.selectClasses.classSelect}[data-id="${targetTag.dataset.selectId}"] .select__option[data-value="${targetTag.dataset.value}"]`);
+                        this.optionAction(selectItem, originalSelect, optionItem);
+                    } else if (targetElement.closest(this.getSelectClass(this.selectClasses.classSelectTitle))) this.selectAction(selectItem); else if (targetElement.closest(this.getSelectClass(this.selectClasses.classSelectOption))) {
+                        const optionItem = targetElement.closest(this.getSelectClass(this.selectClasses.classSelectOption));
+                        this.optionAction(selectItem, originalSelect, optionItem);
+                    }
+                } else if (targetType === "focusin" || targetType === "focusout") {
+                    if (targetElement.closest(this.getSelectClass(this.selectClasses.classSelect))) targetType === "focusin" ? selectItem.classList.add(this.selectClasses.classSelectFocus) : selectItem.classList.remove(this.selectClasses.classSelectFocus);
+                } else if (targetType === "keydown" && e.code === "Escape") this.selectsСlose();
+            } else this.selectsСlose();
+        }
+        selectsСlose(selectOneGroup) {
+            const selectsGroup = selectOneGroup ? selectOneGroup : document;
+            const selectActiveItems = selectsGroup.querySelectorAll(`${this.getSelectClass(this.selectClasses.classSelect)}${this.getSelectClass(this.selectClasses.classSelectOpen)}`);
+            if (selectActiveItems.length) selectActiveItems.forEach((selectActiveItem => {
+                this.selectСlose(selectActiveItem);
+            }));
+        }
+        selectСlose(selectItem) {
+            const originalSelect = this.getSelectElement(selectItem).originalSelect;
+            const selectOptions = this.getSelectElement(selectItem, this.selectClasses.classSelectOptions).selectElement;
+            if (!selectOptions.classList.contains("_slide")) {
+                selectItem.classList.remove(this.selectClasses.classSelectOpen);
+                _slideUp(selectOptions, originalSelect.dataset.speed);
+                setTimeout((() => {
+                    selectItem.style.zIndex = "";
+                }), originalSelect.dataset.speed);
+            }
+        }
+        selectAction(selectItem) {
+            const originalSelect = this.getSelectElement(selectItem).originalSelect;
+            const selectOptions = this.getSelectElement(selectItem, this.selectClasses.classSelectOptions).selectElement;
+            const selectOpenzIndex = originalSelect.dataset.zIndex ? originalSelect.dataset.zIndex : 3;
+            this.setOptionsPosition(selectItem);
+            if (originalSelect.closest("[data-one-select]")) {
+                const selectOneGroup = originalSelect.closest("[data-one-select]");
+                this.selectsСlose(selectOneGroup);
+            }
+            setTimeout((() => {
+                if (!selectOptions.classList.contains("_slide")) {
+                    selectItem.classList.toggle(this.selectClasses.classSelectOpen);
+                    _slideToggle(selectOptions, originalSelect.dataset.speed);
+                    if (selectItem.classList.contains(this.selectClasses.classSelectOpen)) selectItem.style.zIndex = selectOpenzIndex; else setTimeout((() => {
+                        selectItem.style.zIndex = "";
+                    }), originalSelect.dataset.speed);
+                }
+            }), 0);
+        }
+        setSelectTitleValue(selectItem, originalSelect) {
+            const selectItemBody = this.getSelectElement(selectItem, this.selectClasses.classSelectBody).selectElement;
+            const selectItemTitle = this.getSelectElement(selectItem, this.selectClasses.classSelectTitle).selectElement;
+            if (selectItemTitle) selectItemTitle.remove();
+            selectItemBody.insertAdjacentHTML("afterbegin", this.getSelectTitleValue(selectItem, originalSelect));
+            originalSelect.hasAttribute("data-search") ? this.searchActions(selectItem) : null;
+        }
+        getSelectTitleValue(selectItem, originalSelect) {
+            let selectTitleValue = this.getSelectedOptionsData(originalSelect, 2).html;
+            if (originalSelect.multiple && originalSelect.hasAttribute("data-tags")) {
+                selectTitleValue = this.getSelectedOptionsData(originalSelect).elements.map((option => `<span role="button" data-select-id="${selectItem.dataset.id}" data-value="${option.value}" class="_select-tag">${this.getSelectElementContent(option)}</span>`)).join("");
+                if (originalSelect.dataset.tags && document.querySelector(originalSelect.dataset.tags)) {
+                    document.querySelector(originalSelect.dataset.tags).innerHTML = selectTitleValue;
+                    if (originalSelect.hasAttribute("data-search")) selectTitleValue = false;
+                }
+            }
+            selectTitleValue = selectTitleValue.length ? selectTitleValue : originalSelect.dataset.placeholder ? originalSelect.dataset.placeholder : "";
+            let pseudoAttribute = "";
+            let pseudoAttributeClass = "";
+            if (originalSelect.hasAttribute("data-pseudo-label")) {
+                pseudoAttribute = originalSelect.dataset.pseudoLabel ? ` data-pseudo-label="${originalSelect.dataset.pseudoLabel}"` : ` data-pseudo-label="Заповніть атрибут"`;
+                pseudoAttributeClass = ` ${this.selectClasses.classSelectPseudoLabel}`;
+            }
+            this.getSelectedOptionsData(originalSelect).values.length ? selectItem.classList.add(this.selectClasses.classSelectActive) : selectItem.classList.remove(this.selectClasses.classSelectActive);
+            if (originalSelect.hasAttribute("data-search")) return `<div class="${this.selectClasses.classSelectTitle}"><span${pseudoAttribute} class="${this.selectClasses.classSelectValue}"><input autocomplete="off" type="text" placeholder="${selectTitleValue}" data-placeholder="${selectTitleValue}" class="${this.selectClasses.classSelectInput}"></span></div>`; else {
+                const customClass = this.getSelectedOptionsData(originalSelect).elements.length && this.getSelectedOptionsData(originalSelect).elements[0].dataset.class ? ` ${this.getSelectedOptionsData(originalSelect).elements[0].dataset.class}` : "";
+                return `<button type="button" class="${this.selectClasses.classSelectTitle}"><span${pseudoAttribute} class="${this.selectClasses.classSelectValue}${pseudoAttributeClass}"><span class="${this.selectClasses.classSelectContent}${customClass}">${selectTitleValue}</span></span></button>`;
+            }
+        }
+        getSelectElementContent(selectOption) {
+            const selectOptionData = selectOption.dataset.asset ? `${selectOption.dataset.asset}` : "";
+            const selectOptionDataHTML = selectOptionData.indexOf("img") >= 0 ? `<img src="${selectOptionData}" alt="">` : selectOptionData;
+            let selectOptionContentHTML = ``;
+            selectOptionContentHTML += selectOptionData ? `<span class="${this.selectClasses.classSelectRow}">` : "";
+            selectOptionContentHTML += selectOptionData ? `<span class="${this.selectClasses.classSelectData}">` : "";
+            selectOptionContentHTML += selectOptionData ? selectOptionDataHTML : "";
+            selectOptionContentHTML += selectOptionData ? `</span>` : "";
+            selectOptionContentHTML += selectOptionData ? `<span class="${this.selectClasses.classSelectText}">` : "";
+            selectOptionContentHTML += selectOption.textContent;
+            selectOptionContentHTML += selectOptionData ? `</span>` : "";
+            selectOptionContentHTML += selectOptionData ? `</span>` : "";
+            return selectOptionContentHTML;
+        }
+        getSelectPlaceholder(originalSelect) {
+            const selectPlaceholder = Array.from(originalSelect.options).find((option => !option.value));
+            if (selectPlaceholder) return {
+                value: selectPlaceholder.textContent,
+                show: selectPlaceholder.hasAttribute("data-show"),
+                label: {
+                    show: selectPlaceholder.hasAttribute("data-label"),
+                    text: selectPlaceholder.dataset.label
+                }
+            };
+        }
+        getSelectedOptionsData(originalSelect, type) {
+            let selectedOptions = [];
+            if (originalSelect.multiple) selectedOptions = Array.from(originalSelect.options).filter((option => option.value)).filter((option => option.selected)); else selectedOptions.push(originalSelect.options[originalSelect.selectedIndex]);
+            return {
+                elements: selectedOptions.map((option => option)),
+                values: selectedOptions.filter((option => option.value)).map((option => option.value)),
+                html: selectedOptions.map((option => this.getSelectElementContent(option)))
+            };
+        }
+        getOptions(originalSelect) {
+            const selectOptionsScroll = originalSelect.hasAttribute("data-scroll") ? `data-simplebar` : "";
+            const customMaxHeightValue = +originalSelect.dataset.scroll ? +originalSelect.dataset.scroll : null;
+            let selectOptions = Array.from(originalSelect.options);
+            if (selectOptions.length > 0) {
+                let selectOptionsHTML = ``;
+                if (this.getSelectPlaceholder(originalSelect) && !this.getSelectPlaceholder(originalSelect).show || originalSelect.multiple) selectOptions = selectOptions.filter((option => option.value));
+                selectOptionsHTML += `<div ${selectOptionsScroll} ${selectOptionsScroll ? `style="max-height: ${customMaxHeightValue}px"` : ""} class="${this.selectClasses.classSelectOptionsScroll}">`;
+                selectOptions.forEach((selectOption => {
+                    selectOptionsHTML += this.getOption(selectOption, originalSelect);
+                }));
+                selectOptionsHTML += `</div>`;
+                return selectOptionsHTML;
+            }
+        }
+        getOption(selectOption, originalSelect) {
+            const selectOptionSelected = selectOption.selected && originalSelect.multiple ? ` ${this.selectClasses.classSelectOptionSelected}` : "";
+            const selectOptionHide = selectOption.selected && !originalSelect.hasAttribute("data-show-selected") && !originalSelect.multiple ? `hidden` : ``;
+            const selectOptionClass = selectOption.dataset.class ? ` ${selectOption.dataset.class}` : "";
+            const selectOptionLink = selectOption.dataset.href ? selectOption.dataset.href : false;
+            const selectOptionLinkTarget = selectOption.hasAttribute("data-href-blank") ? `target="_blank"` : "";
+            let selectOptionHTML = ``;
+            selectOptionHTML += selectOptionLink ? `<a ${selectOptionLinkTarget} ${selectOptionHide} href="${selectOptionLink}" data-value="${selectOption.value}" class="${this.selectClasses.classSelectOption}${selectOptionClass}${selectOptionSelected}">` : `<button ${selectOptionHide} class="${this.selectClasses.classSelectOption}${selectOptionClass}${selectOptionSelected}" data-value="${selectOption.value}" type="button">`;
+            selectOptionHTML += this.getSelectElementContent(selectOption);
+            selectOptionHTML += selectOptionLink ? `</a>` : `</button>`;
+            return selectOptionHTML;
+        }
+        setOptions(selectItem, originalSelect) {
+            const selectItemOptions = this.getSelectElement(selectItem, this.selectClasses.classSelectOptions).selectElement;
+            selectItemOptions.innerHTML = this.getOptions(originalSelect);
+        }
+        setOptionsPosition(selectItem) {
+            const originalSelect = this.getSelectElement(selectItem).originalSelect;
+            const selectOptions = this.getSelectElement(selectItem, this.selectClasses.classSelectOptions).selectElement;
+            const selectItemScroll = this.getSelectElement(selectItem, this.selectClasses.classSelectOptionsScroll).selectElement;
+            const customMaxHeightValue = +originalSelect.dataset.scroll ? `${+originalSelect.dataset.scroll}px` : ``;
+            const selectOptionsPosMargin = +originalSelect.dataset.optionsMargin ? +originalSelect.dataset.optionsMargin : 10;
+            if (!selectItem.classList.contains(this.selectClasses.classSelectOpen)) {
+                selectOptions.hidden = false;
+                const selectItemScrollHeight = selectItemScroll.offsetHeight ? selectItemScroll.offsetHeight : parseInt(window.getComputedStyle(selectItemScroll).getPropertyValue("max-height"));
+                const selectOptionsHeight = selectOptions.offsetHeight > selectItemScrollHeight ? selectOptions.offsetHeight : selectItemScrollHeight + selectOptions.offsetHeight;
+                const selectOptionsScrollHeight = selectOptionsHeight - selectItemScrollHeight;
+                selectOptions.hidden = true;
+                const selectItemHeight = selectItem.offsetHeight;
+                const selectItemPos = selectItem.getBoundingClientRect().top;
+                const selectItemTotal = selectItemPos + selectOptionsHeight + selectItemHeight + selectOptionsScrollHeight;
+                const selectItemResult = window.innerHeight - (selectItemTotal + selectOptionsPosMargin);
+                if (selectItemResult < 0) {
+                    const newMaxHeightValue = selectOptionsHeight + selectItemResult;
+                    if (newMaxHeightValue < 100) {
+                        selectItem.classList.add("select--show-top");
+                        selectItemScroll.style.maxHeight = selectItemPos < selectOptionsHeight ? `${selectItemPos - (selectOptionsHeight - selectItemPos)}px` : customMaxHeightValue;
+                    } else {
+                        selectItem.classList.remove("select--show-top");
+                        selectItemScroll.style.maxHeight = `${newMaxHeightValue}px`;
+                    }
+                }
+            } else setTimeout((() => {
+                selectItem.classList.remove("select--show-top");
+                selectItemScroll.style.maxHeight = customMaxHeightValue;
+            }), +originalSelect.dataset.speed);
+        }
+        optionAction(selectItem, originalSelect, optionItem) {
+            const selectOptions = selectItem.querySelector(`${this.getSelectClass(this.selectClasses.classSelectOptions)}`);
+            if (!selectOptions.classList.contains("_slide")) {
+                if (originalSelect.multiple) {
+                    optionItem.classList.toggle(this.selectClasses.classSelectOptionSelected);
+                    const originalSelectSelectedItems = this.getSelectedOptionsData(originalSelect).elements;
+                    originalSelectSelectedItems.forEach((originalSelectSelectedItem => {
+                        originalSelectSelectedItem.removeAttribute("selected");
+                    }));
+                    const selectSelectedItems = selectItem.querySelectorAll(this.getSelectClass(this.selectClasses.classSelectOptionSelected));
+                    selectSelectedItems.forEach((selectSelectedItems => {
+                        originalSelect.querySelector(`option[value = "${selectSelectedItems.dataset.value}"]`).setAttribute("selected", "selected");
+                    }));
+                } else {
+                    if (!originalSelect.hasAttribute("data-show-selected")) setTimeout((() => {
+                        if (selectItem.querySelector(`${this.getSelectClass(this.selectClasses.classSelectOption)}[hidden]`)) selectItem.querySelector(`${this.getSelectClass(this.selectClasses.classSelectOption)}[hidden]`).hidden = false;
+                        optionItem.hidden = true;
+                    }), this.config.speed);
+                    originalSelect.value = optionItem.hasAttribute("data-value") ? optionItem.dataset.value : optionItem.textContent;
+                    this.selectAction(selectItem);
+                }
+                this.setSelectTitleValue(selectItem, originalSelect);
+                this.setSelectChange(originalSelect);
+            }
+        }
+        selectChange(e) {
+            const originalSelect = e.target;
+            this.selectBuild(originalSelect);
+            this.setSelectChange(originalSelect);
+        }
+        setSelectChange(originalSelect) {
+            if (originalSelect.hasAttribute("data-validate")) formValidate.validateInput(originalSelect);
+            if (originalSelect.hasAttribute("data-submit") && originalSelect.value) {
+                let tempButton = document.createElement("button");
+                tempButton.type = "submit";
+                originalSelect.closest("form").append(tempButton);
+                tempButton.click();
+                tempButton.remove();
+            }
+            const selectItem = originalSelect.parentElement;
+            this.selectCallback(selectItem, originalSelect);
+        }
+        selectDisabled(selectItem, originalSelect) {
+            if (originalSelect.disabled) {
+                selectItem.classList.add(this.selectClasses.classSelectDisabled);
+                this.getSelectElement(selectItem, this.selectClasses.classSelectTitle).selectElement.disabled = true;
+            } else {
+                selectItem.classList.remove(this.selectClasses.classSelectDisabled);
+                this.getSelectElement(selectItem, this.selectClasses.classSelectTitle).selectElement.disabled = false;
+            }
+        }
+        searchActions(selectItem) {
+            this.getSelectElement(selectItem).originalSelect;
+            const selectInput = this.getSelectElement(selectItem, this.selectClasses.classSelectInput).selectElement;
+            const selectOptions = this.getSelectElement(selectItem, this.selectClasses.classSelectOptions).selectElement;
+            const selectOptionsItems = selectOptions.querySelectorAll(`.${this.selectClasses.classSelectOption} `);
+            const _this = this;
+            selectInput.addEventListener("input", (function() {
+                selectOptionsItems.forEach((selectOptionsItem => {
+                    if (selectOptionsItem.textContent.toUpperCase().includes(selectInput.value.toUpperCase())) selectOptionsItem.hidden = false; else selectOptionsItem.hidden = true;
+                }));
+                selectOptions.hidden === true ? _this.selectAction(selectItem) : null;
+            }));
+        }
+        selectCallback(selectItem, originalSelect) {
+            document.dispatchEvent(new CustomEvent("selectCallback", {
+                detail: {
+                    select: originalSelect
+                }
+            }));
+        }
+        setLogging(message) {
+            this.config.logging ? FLS(`[select]: ${message} `) : null;
+        }
+    }
+    flsModules.select = new SelectConstructor({});
     function ssr_window_esm_isObject(obj) {
         return obj !== null && typeof obj === "object" && "constructor" in obj && obj.constructor === Object;
     }
@@ -3308,231 +3967,6 @@
         }));
     }));
     swiper_core_Swiper.use([ Resize, Observer ]);
-    function Mousewheel(_ref) {
-        let {swiper, extendParams, on, emit} = _ref;
-        const window = ssr_window_esm_getWindow();
-        extendParams({
-            mousewheel: {
-                enabled: false,
-                releaseOnEdges: false,
-                invert: false,
-                forceToAxis: false,
-                sensitivity: 1,
-                eventsTarget: "container",
-                thresholdDelta: null,
-                thresholdTime: null,
-                noMousewheelClass: "swiper-no-mousewheel"
-            }
-        });
-        swiper.mousewheel = {
-            enabled: false
-        };
-        let timeout;
-        let lastScrollTime = utils_now();
-        let lastEventBeforeSnap;
-        const recentWheelEvents = [];
-        function normalize(e) {
-            const PIXEL_STEP = 10;
-            const LINE_HEIGHT = 40;
-            const PAGE_HEIGHT = 800;
-            let sX = 0;
-            let sY = 0;
-            let pX = 0;
-            let pY = 0;
-            if ("detail" in e) sY = e.detail;
-            if ("wheelDelta" in e) sY = -e.wheelDelta / 120;
-            if ("wheelDeltaY" in e) sY = -e.wheelDeltaY / 120;
-            if ("wheelDeltaX" in e) sX = -e.wheelDeltaX / 120;
-            if ("axis" in e && e.axis === e.HORIZONTAL_AXIS) {
-                sX = sY;
-                sY = 0;
-            }
-            pX = sX * PIXEL_STEP;
-            pY = sY * PIXEL_STEP;
-            if ("deltaY" in e) pY = e.deltaY;
-            if ("deltaX" in e) pX = e.deltaX;
-            if (e.shiftKey && !pX) {
-                pX = pY;
-                pY = 0;
-            }
-            if ((pX || pY) && e.deltaMode) if (e.deltaMode === 1) {
-                pX *= LINE_HEIGHT;
-                pY *= LINE_HEIGHT;
-            } else {
-                pX *= PAGE_HEIGHT;
-                pY *= PAGE_HEIGHT;
-            }
-            if (pX && !sX) sX = pX < 1 ? -1 : 1;
-            if (pY && !sY) sY = pY < 1 ? -1 : 1;
-            return {
-                spinX: sX,
-                spinY: sY,
-                pixelX: pX,
-                pixelY: pY
-            };
-        }
-        function handleMouseEnter() {
-            if (!swiper.enabled) return;
-            swiper.mouseEntered = true;
-        }
-        function handleMouseLeave() {
-            if (!swiper.enabled) return;
-            swiper.mouseEntered = false;
-        }
-        function animateSlider(newEvent) {
-            if (swiper.params.mousewheel.thresholdDelta && newEvent.delta < swiper.params.mousewheel.thresholdDelta) return false;
-            if (swiper.params.mousewheel.thresholdTime && utils_now() - lastScrollTime < swiper.params.mousewheel.thresholdTime) return false;
-            if (newEvent.delta >= 6 && utils_now() - lastScrollTime < 60) return true;
-            if (newEvent.direction < 0) {
-                if ((!swiper.isEnd || swiper.params.loop) && !swiper.animating) {
-                    swiper.slideNext();
-                    emit("scroll", newEvent.raw);
-                }
-            } else if ((!swiper.isBeginning || swiper.params.loop) && !swiper.animating) {
-                swiper.slidePrev();
-                emit("scroll", newEvent.raw);
-            }
-            lastScrollTime = (new window.Date).getTime();
-            return false;
-        }
-        function releaseScroll(newEvent) {
-            const params = swiper.params.mousewheel;
-            if (newEvent.direction < 0) {
-                if (swiper.isEnd && !swiper.params.loop && params.releaseOnEdges) return true;
-            } else if (swiper.isBeginning && !swiper.params.loop && params.releaseOnEdges) return true;
-            return false;
-        }
-        function handle(event) {
-            let e = event;
-            let disableParentSwiper = true;
-            if (!swiper.enabled) return;
-            if (event.target.closest(`.${swiper.params.mousewheel.noMousewheelClass}`)) return;
-            const params = swiper.params.mousewheel;
-            if (swiper.params.cssMode) e.preventDefault();
-            let targetEl = swiper.el;
-            if (swiper.params.mousewheel.eventsTarget !== "container") targetEl = document.querySelector(swiper.params.mousewheel.eventsTarget);
-            const targetElContainsTarget = targetEl && targetEl.contains(e.target);
-            if (!swiper.mouseEntered && !targetElContainsTarget && !params.releaseOnEdges) return true;
-            if (e.originalEvent) e = e.originalEvent;
-            let delta = 0;
-            const rtlFactor = swiper.rtlTranslate ? -1 : 1;
-            const data = normalize(e);
-            if (params.forceToAxis) if (swiper.isHorizontal()) if (Math.abs(data.pixelX) > Math.abs(data.pixelY)) delta = -data.pixelX * rtlFactor; else return true; else if (Math.abs(data.pixelY) > Math.abs(data.pixelX)) delta = -data.pixelY; else return true; else delta = Math.abs(data.pixelX) > Math.abs(data.pixelY) ? -data.pixelX * rtlFactor : -data.pixelY;
-            if (delta === 0) return true;
-            if (params.invert) delta = -delta;
-            let positions = swiper.getTranslate() + delta * params.sensitivity;
-            if (positions >= swiper.minTranslate()) positions = swiper.minTranslate();
-            if (positions <= swiper.maxTranslate()) positions = swiper.maxTranslate();
-            disableParentSwiper = swiper.params.loop ? true : !(positions === swiper.minTranslate() || positions === swiper.maxTranslate());
-            if (disableParentSwiper && swiper.params.nested) e.stopPropagation();
-            if (!swiper.params.freeMode || !swiper.params.freeMode.enabled) {
-                const newEvent = {
-                    time: utils_now(),
-                    delta: Math.abs(delta),
-                    direction: Math.sign(delta),
-                    raw: event
-                };
-                if (recentWheelEvents.length >= 2) recentWheelEvents.shift();
-                const prevEvent = recentWheelEvents.length ? recentWheelEvents[recentWheelEvents.length - 1] : void 0;
-                recentWheelEvents.push(newEvent);
-                if (prevEvent) {
-                    if (newEvent.direction !== prevEvent.direction || newEvent.delta > prevEvent.delta || newEvent.time > prevEvent.time + 150) animateSlider(newEvent);
-                } else animateSlider(newEvent);
-                if (releaseScroll(newEvent)) return true;
-            } else {
-                const newEvent = {
-                    time: utils_now(),
-                    delta: Math.abs(delta),
-                    direction: Math.sign(delta)
-                };
-                const ignoreWheelEvents = lastEventBeforeSnap && newEvent.time < lastEventBeforeSnap.time + 500 && newEvent.delta <= lastEventBeforeSnap.delta && newEvent.direction === lastEventBeforeSnap.direction;
-                if (!ignoreWheelEvents) {
-                    lastEventBeforeSnap = void 0;
-                    let position = swiper.getTranslate() + delta * params.sensitivity;
-                    const wasBeginning = swiper.isBeginning;
-                    const wasEnd = swiper.isEnd;
-                    if (position >= swiper.minTranslate()) position = swiper.minTranslate();
-                    if (position <= swiper.maxTranslate()) position = swiper.maxTranslate();
-                    swiper.setTransition(0);
-                    swiper.setTranslate(position);
-                    swiper.updateProgress();
-                    swiper.updateActiveIndex();
-                    swiper.updateSlidesClasses();
-                    if (!wasBeginning && swiper.isBeginning || !wasEnd && swiper.isEnd) swiper.updateSlidesClasses();
-                    if (swiper.params.loop) swiper.loopFix({
-                        direction: newEvent.direction < 0 ? "next" : "prev",
-                        byMousewheel: true
-                    });
-                    if (swiper.params.freeMode.sticky) {
-                        clearTimeout(timeout);
-                        timeout = void 0;
-                        if (recentWheelEvents.length >= 15) recentWheelEvents.shift();
-                        const prevEvent = recentWheelEvents.length ? recentWheelEvents[recentWheelEvents.length - 1] : void 0;
-                        const firstEvent = recentWheelEvents[0];
-                        recentWheelEvents.push(newEvent);
-                        if (prevEvent && (newEvent.delta > prevEvent.delta || newEvent.direction !== prevEvent.direction)) recentWheelEvents.splice(0); else if (recentWheelEvents.length >= 15 && newEvent.time - firstEvent.time < 500 && firstEvent.delta - newEvent.delta >= 1 && newEvent.delta <= 6) {
-                            const snapToThreshold = delta > 0 ? .8 : .2;
-                            lastEventBeforeSnap = newEvent;
-                            recentWheelEvents.splice(0);
-                            timeout = utils_nextTick((() => {
-                                swiper.slideToClosest(swiper.params.speed, true, void 0, snapToThreshold);
-                            }), 0);
-                        }
-                        if (!timeout) timeout = utils_nextTick((() => {
-                            const snapToThreshold = .5;
-                            lastEventBeforeSnap = newEvent;
-                            recentWheelEvents.splice(0);
-                            swiper.slideToClosest(swiper.params.speed, true, void 0, snapToThreshold);
-                        }), 500);
-                    }
-                    if (!ignoreWheelEvents) emit("scroll", e);
-                    if (swiper.params.autoplay && swiper.params.autoplayDisableOnInteraction) swiper.autoplay.stop();
-                    if (params.releaseOnEdges && (position === swiper.minTranslate() || position === swiper.maxTranslate())) return true;
-                }
-            }
-            if (e.preventDefault) e.preventDefault(); else e.returnValue = false;
-            return false;
-        }
-        function events(method) {
-            let targetEl = swiper.el;
-            if (swiper.params.mousewheel.eventsTarget !== "container") targetEl = document.querySelector(swiper.params.mousewheel.eventsTarget);
-            targetEl[method]("mouseenter", handleMouseEnter);
-            targetEl[method]("mouseleave", handleMouseLeave);
-            targetEl[method]("wheel", handle);
-        }
-        function enable() {
-            if (swiper.params.cssMode) {
-                swiper.wrapperEl.removeEventListener("wheel", handle);
-                return true;
-            }
-            if (swiper.mousewheel.enabled) return false;
-            events("addEventListener");
-            swiper.mousewheel.enabled = true;
-            return true;
-        }
-        function disable() {
-            if (swiper.params.cssMode) {
-                swiper.wrapperEl.addEventListener(event, handle);
-                return true;
-            }
-            if (!swiper.mousewheel.enabled) return false;
-            events("removeEventListener");
-            swiper.mousewheel.enabled = false;
-            return true;
-        }
-        on("init", (() => {
-            if (!swiper.params.mousewheel.enabled && swiper.params.cssMode) disable();
-            if (swiper.params.mousewheel.enabled) enable();
-        }));
-        on("destroy", (() => {
-            if (swiper.params.cssMode) enable();
-            if (swiper.mousewheel.enabled) disable();
-        }));
-        Object.assign(swiper.mousewheel, {
-            enable,
-            disable
-        });
-    }
     function create_element_if_not_defined_createElementIfNotDefined(swiper, originalParams, params, checkProps) {
         if (swiper.params.createElements) Object.keys(checkProps).forEach((key => {
             if (!params[key] && params.auto === true) {
@@ -4276,13 +4710,12 @@
     }
     function initSliders() {
         if (document.querySelector(".swiper")) new swiper_core_Swiper(".swiper", {
-            modules: [ Navigation, Pagination, Autoplay, Mousewheel ],
+            modules: [ Navigation, Pagination, Autoplay ],
             observer: true,
             observeParents: true,
             slidesPerView: 3.5,
             spaceBetween: 70,
-            speed: 700,
-            mousewheel: true,
+            speed: 800,
             touchRatio: 1,
             simulateTouch: true,
             autoplay: {
@@ -4413,7 +4846,7 @@
             this.scrollWatcherLogging(`Я перестав стежити за ${targetElement.classList}`);
         }
         scrollWatcherLogging(message) {
-            this.config.logging ? functions_FLS(`[Спостерігач]: ${message}`) : null;
+            this.config.logging ? FLS(`[Спостерігач]: ${message}`) : null;
         }
         scrollWatcherCallback(entry, observer) {
             const targetElement = entry.target;
@@ -4426,8 +4859,53 @@
             }));
         }
     }
-    modules_flsModules.watcher = new ScrollWatcher({});
+    flsModules.watcher = new ScrollWatcher({});
     let addWindowScrollEvent = false;
+    function pageNavigation() {
+        document.addEventListener("click", pageNavigationAction);
+        document.addEventListener("watcherCallback", pageNavigationAction);
+        function pageNavigationAction(e) {
+            if (e.type === "click") {
+                const targetElement = e.target;
+                if (targetElement.closest("[data-goto]")) {
+                    const gotoLink = targetElement.closest("[data-goto]");
+                    const gotoLinkSelector = gotoLink.dataset.goto ? gotoLink.dataset.goto : "";
+                    const noHeader = gotoLink.hasAttribute("data-goto-header") ? true : false;
+                    const gotoSpeed = gotoLink.dataset.gotoSpeed ? gotoLink.dataset.gotoSpeed : 500;
+                    const offsetTop = gotoLink.dataset.gotoTop ? parseInt(gotoLink.dataset.gotoTop) : 0;
+                    if (flsModules.fullpage) {
+                        const fullpageSection = document.querySelector(`${gotoLinkSelector}`).closest("[data-fp-section]");
+                        const fullpageSectionId = fullpageSection ? +fullpageSection.dataset.fpId : null;
+                        if (fullpageSectionId !== null) {
+                            flsModules.fullpage.switchingSection(fullpageSectionId);
+                            document.documentElement.classList.contains("menu-open") ? menuClose() : null;
+                        }
+                    } else gotoBlock(gotoLinkSelector, noHeader, gotoSpeed, offsetTop);
+                    e.preventDefault();
+                }
+            } else if (e.type === "watcherCallback" && e.detail) {
+                const entry = e.detail.entry;
+                const targetElement = entry.target;
+                if (targetElement.dataset.watch === "navigator") {
+                    document.querySelector(`[data-goto]._navigator-active`);
+                    let navigatorCurrentItem;
+                    if (targetElement.id && document.querySelector(`[data-goto="#${targetElement.id}"]`)) navigatorCurrentItem = document.querySelector(`[data-goto="#${targetElement.id}"]`); else if (targetElement.classList.length) for (let index = 0; index < targetElement.classList.length; index++) {
+                        const element = targetElement.classList[index];
+                        if (document.querySelector(`[data-goto=".${element}"]`)) {
+                            navigatorCurrentItem = document.querySelector(`[data-goto=".${element}"]`);
+                            break;
+                        }
+                    }
+                    if (entry.isIntersecting) navigatorCurrentItem ? navigatorCurrentItem.classList.add("_navigator-active") : null; else navigatorCurrentItem ? navigatorCurrentItem.classList.remove("_navigator-active") : null;
+                }
+            }
+        }
+        if (getHash()) {
+            let goToHash;
+            if (document.querySelector(`#${getHash()}`)) goToHash = `#${getHash()}`; else if (document.querySelector(`.${getHash()}`)) goToHash = `.${getHash()}`;
+            goToHash ? gotoBlock(goToHash, true, 500, 20) : null;
+        }
+    }
     function headerScroll() {
         addWindowScrollEvent = true;
         const header = document.querySelector("header.header");
@@ -4577,9 +5055,33 @@
     }
     const da = new DynamicAdapt("max");
     da.init();
+    document.addEventListener("DOMContentLoaded", (event => {
+        const inputs = document.querySelectorAll(".form__input");
+        function updateLabelVisibility(input) {
+            const label = document.querySelector(`label[for="${input.id}"]`);
+            if (label) if (input.value) label.classList.add("hidden"); else label.classList.remove("hidden");
+        }
+        inputs.forEach((input => {
+            updateLabelVisibility(input);
+            input.addEventListener("input", (() => updateLabelVisibility(input)));
+        }));
+        document.addEventListener("formSent", (function(e) {
+            let labels = document.querySelectorAll(".form__label");
+            labels.forEach((label => {
+                label.classList.remove("hidden");
+            }));
+            alert("Форму успішно відправлено!");
+        }));
+    }));
     isWebp();
     addLoadedClass();
     menuInit();
+    formFieldsInit({
+        viewPass: false,
+        autoHeight: true
+    });
+    formSubmit();
+    pageNavigation();
     headerScroll();
     digitsCounter();
 })();
